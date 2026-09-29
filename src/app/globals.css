@@ -1,0 +1,246 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+/*
+ * StreamRoyalties design tokens. Installed from the Monark UI registry theme,
+ * then fully re-themed for StreamRoyalties' own identity ("analog desk, live
+ * ledger"): aluminium panels and ink by day, a dark studio by night, oxblood
+ * (the REC light) as the one loud colour and brass as the secondary.
+ * See docs/site-plan.md §8 for the reasoning and contrast ratios.
+ */
+@theme inline {
+  --font-sans: var(--font-archivo), ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-brass: var(--brass);
+  --color-panel: var(--panel);
+  --color-meter-off: var(--meter-off);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.6);
+  --radius-2xl: calc(var(--radius) * 2);
+  --radius-3xl: calc(var(--radius) * 2.4);
+  --radius-4xl: calc(var(--radius) * 2.8);
+  --animate-lamp: lamp 1.6s ease-in-out infinite;
+  --animate-roll-in: roll-in 260ms cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  --animate-row-in: row-in 320ms ease-out both;
+}
+
+:root {
+  --radius: 0.375rem;
+  --background: #efede8;
+  --foreground: #1a1714;
+  --card: #f9f8f5;
+  --card-foreground: #1a1714;
+  --popover: #f9f8f5;
+  --popover-foreground: #1a1714;
+  --primary: #7c1d34;
+  --primary-foreground: #fbf3ea;
+  --secondary: #e3e0d8;
+  --secondary-foreground: #1a1714;
+  --muted: #e3e0d8;
+  --muted-foreground: #57514a;
+  --accent: #e6e1d5;
+  --accent-foreground: #1a1714;
+  --destructive: #b42318;
+  --destructive-foreground: #ffffff;
+  --border: #cfcac0;
+  --input: #8f887c;
+  --ring: #7c1d34;
+  --success: #2d6a3a;
+  --warning: #8a5500;
+  --brass: #7a5c24;
+  --panel: #e8e5de;
+  --meter-off: #d9d4ca;
+  --chart-1: #7c1d34;
+  --chart-2: #a07a3a;
+  --chart-3: #2e6468;
+  --chart-4: #5f6b2a;
+  --chart-5: #4b4038;
+  --sidebar: #efede8;
+  --sidebar-foreground: #1a1714;
+  --sidebar-primary: #7c1d34;
+  --sidebar-primary-foreground: #fbf3ea;
+  --sidebar-accent: #e3e0d8;
+  --sidebar-accent-foreground: #1a1714;
+  --sidebar-border: #cfcac0;
+  --sidebar-ring: #7c1d34;
+}
+
+.dark {
+  --background: #141210;
+  --foreground: #eee7d9;
+  --card: #1c1916;
+  --card-foreground: #eee7d9;
+  --popover: #1c1916;
+  --popover-foreground: #eee7d9;
+  --primary: #e57a8e;
+  --primary-foreground: #1a0c10;
+  --secondary: #27231f;
+  --secondary-foreground: #eee7d9;
+  --muted: #27231f;
+  --muted-foreground: #a99f8f;
+  --accent: #2e2924;
+  --accent-foreground: #eee7d9;
+  --destructive: #f08070;
+  --destructive-foreground: #1a0c0a;
+  --border: #3a332c;
+  --input: #7a6f62;
+  --ring: #e57a8e;
+  --success: #7cc48a;
+  --warning: #e2b45c;
+  --brass: #d2a860;
+  --panel: #181512;
+  --meter-off: #312b25;
+  --chart-1: #e57a8e;
+  --chart-2: #d2a860;
+  --chart-3: #6fb3b5;
+  --chart-4: #a9b96a;
+  --chart-5: #b9a99a;
+  --sidebar: #141210;
+  --sidebar-foreground: #eee7d9;
+  --sidebar-primary: #e57a8e;
+  --sidebar-primary-foreground: #1a0c10;
+  --sidebar-accent: #27231f;
+  --sidebar-accent-foreground: #eee7d9;
+  --sidebar-border: #3a332c;
+  --sidebar-ring: #e57a8e;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  html {
+    @apply font-sans;
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 5rem;
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "ss01";
+  }
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+  }
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  /* Console silkscreen label: small, uppercase, tracked. */
+  .silk {
+    font-size: 0.6875rem;
+    line-height: 1rem;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+  }
+  /* Expanded display cut of Archivo, like tape-box labels. */
+  .display {
+    font-stretch: 118%;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.02;
+  }
+  .wide {
+    font-stretch: 112%;
+  }
+  .nums {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+  /* A console module: hairline border, a 1px top bevel, no blur shadows. */
+  .module {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: calc(var(--radius) * 1.6);
+    box-shadow: inset 0 1px 0 color-mix(in oklab, white 55%, transparent);
+  }
+  .dark .module {
+    box-shadow: inset 0 1px 0 color-mix(in oklab, white 5%, transparent);
+  }
+  .rule-x {
+    background-image: repeating-linear-gradient(90deg, var(--border) 0 1px, transparent 1px 12px);
+    height: 6px;
+  }
+}
+
+@keyframes lamp {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+@keyframes roll-in {
+  from {
+    transform: translateY(40%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes row-in {
+  from {
+    background-color: color-mix(in oklab, var(--primary) 14%, transparent);
+  }
+  to {
+    background-color: transparent;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
