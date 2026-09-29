@@ -1,4 +1,4 @@
-import { ArrowRightIcon, AudioLinesIcon, ArrowDownToLineIcon, PlusIcon, SlidersVerticalIcon } from "lucide-react"
+import { ArrowRightIcon, AudioLinesIcon, ArrowDownToLineIcon, SlidersVerticalIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -39,8 +39,7 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
       <section className="relative overflow-hidden border-b">
         <div className="mx-auto grid max-w-7xl gap-12 px-4 pt-12 pb-16 sm:px-6 lg:grid-cols-[1.02fr_1fr] lg:items-center lg:gap-14 lg:pt-20 lg:pb-24">
           <div>
-            <Eyebrow>{h.eyebrow}</Eyebrow>
-            <h1 className="display mt-5 text-[2.6rem] text-balance sm:text-6xl lg:text-[4.1rem]">{h.title}</h1>
+            <h1 className="display text-[2.6rem] text-balance sm:text-6xl lg:text-[4.1rem]">{h.title}</h1>
             <p className="mt-6 max-w-xl text-lg text-muted-foreground sm:text-xl">{h.sub}</p>
             <div className="mt-9 flex flex-col gap-3 sm:flex-row">
               <Button asChild size="lg">
@@ -53,10 +52,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 <Link href={href(locale, "/how-it-works")}>{h.ctaSecondary}</Link>
               </Button>
             </div>
-            <p className="mt-6 inline-flex items-center gap-2 text-xs text-muted-foreground">
-              <span className="size-1.5 rounded-full bg-primary" aria-hidden />
-              {dict.common.demoBadge}
-            </p>
           </div>
           <MeterBridge
             locale={locale}
@@ -121,9 +116,9 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
         <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:py-24">
           <Eyebrow>{h.featuresEyebrow}</Eyebrow>
           <h2 className="display mt-4 max-w-3xl text-3xl text-balance sm:text-5xl">{h.featuresTitle}</h2>
-          <div className="mt-12 grid gap-4 sm:grid-cols-2">
+          <div className="mt-12 grid gap-4 md:grid-cols-3">
             {h.features.map((f, i) => (
-              <article key={f.title} className="module flex gap-5 p-6 sm:p-7">
+              <article key={f.title} className="module flex flex-col gap-6 p-6 sm:p-7">
                 <FeatureGlyph index={i} />
                 <div>
                   <h3 className="wide text-lg font-bold">{f.title}</h3>
@@ -172,27 +167,6 @@ export default async function HomePage({ params }: PageProps<"/[locale]">) {
                 </li>
               ))}
             </ul>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ */}
-      <section className="border-b bg-panel">
-        <div className="mx-auto grid max-w-7xl gap-10 px-4 py-16 sm:px-6 lg:grid-cols-[1fr_1.6fr] lg:py-24">
-          <div>
-            <Eyebrow>{h.faqEyebrow}</Eyebrow>
-            <h2 className="display mt-4 text-3xl sm:text-5xl">{h.faqTitle}</h2>
-          </div>
-          <div className="divide-y rounded-xl border bg-card">
-            {h.faq.map((f) => (
-              <details key={f.q} className="group px-5 sm:px-6">
-                <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 font-semibold [&::-webkit-details-marker]:hidden">
-                  {f.q}
-                  <PlusIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-45" aria-hidden />
-                </summary>
-                <p className="pb-5 text-muted-foreground">{f.a}</p>
-              </details>
-            ))}
           </div>
         </div>
       </section>

@@ -17,7 +17,6 @@ export function SiteFooter({ locale, dict }: { locale: Locale; dict: Dictionary 
             <span className="size-1.5 rounded-full bg-primary" aria-hidden />
             {dict.common.demoBadge}
           </p>
-          <p className="mt-3 text-xs text-muted-foreground">{dict.common.testnet}</p>
         </div>
         <nav aria-label={dict.nav.footerSite}>
           <h2 className="silk text-muted-foreground">{dict.nav.footerSite}</h2>

@@ -24,6 +24,7 @@ const fr: Dictionary = {
   common: {
     skip: "Aller au contenu",
     demoBadge: "Démo · données simulées",
+    demoChip: "Démo",
     testnet: "Démo sur réseau de test · pas un conseil financier · aucun vrai fonds",
     openStudio: "Ouvrir le studio",
     openMenu: "Ouvrir le menu",
@@ -105,7 +106,7 @@ const fr: Dictionary = {
   home: {
     eyebrow: "Contrats de redevances pour équipes créatives",
     title: "Payé à chaque seconde où l'on vous écoute.",
-    sub: "StreamRoyalties fait de votre feuille de partage un contrat vivant. Les revenus des écoutes, des ventes et des licences arrivent à chaque collaborateur dès qu'ils tombent, et chaque cent reste traçable.",
+    sub: "Votre feuille de partage devient un contrat vivant : écoutes, ventes et licences arrivent à chaque collaborateur dès qu'elles tombent.",
     ctaPrimary: "Ouvrir le studio",
     ctaSecondary: "Voir comment un partage fonctionne",
     meterLabel: "Vumètres de redevances en direct pour Night Bus Home",
@@ -115,8 +116,7 @@ const fr: Dictionary = {
     meterNote: "Revenus simulés, rejoués dans votre navigateur.",
     waitEyebrow: "Pourquoi c'est important",
     waitTitle: "Six mois d'attente en moins.",
-    waitBody:
-      "Aujourd'hui, une écoute de mars apparaît sur un relevé en septembre, atterrit dans le compte d'une seule personne, puis se partage à la main. StreamRoyalties la partage à la seconde où elle arrive.",
+    waitBody: "Une écoute de mars arrive encore, pour la plupart des équipes, sur un relevé de septembre.",
     oldLabel: "La façon habituelle",
     oldSteps: ["Écoute", "Distributeur", "Relevé, 90 à 180 jours plus tard", "Le compte d'une seule personne", "Tableur", "Virements, un jour"],
     newLabel: "Avec StreamRoyalties",
@@ -126,35 +126,31 @@ const fr: Dictionary = {
     steps: [
       {
         title: "Rédigez la feuille de partage.",
-        body: "Qui a participé, à quel titre, pour quelle part. Les curseurs s'assurent que le total fait exactement 100 %.",
+        body: "Qui a participé et pour quelle part. Les curseurs gardent le total à 100 %.",
       },
       {
         title: "Branchez-y vos revenus.",
-        body: "Paiements de streaming, ventes d'éditions, déblocages et licences sont versés au contrat de l'œuvre plutôt qu'au compte d'une seule personne.",
+        body: "Écoutes, ventes et licences paient le contrat de l'œuvre, pas le compte d'une seule personne.",
       },
       {
         title: "Regardez chaque vumètre monter.",
-        body: "Le solde de chacun grandit en temps réel. Chacun retire quand il veut, sans rien demander à personne.",
+        body: "Les soldes grandissent en temps réel. Chacun retire quand il veut.",
       },
     ],
     featuresEyebrow: "Sur la console",
     featuresTitle: "Pensé pour la façon dont l'argent créatif circule vraiment.",
     features: [
       {
-        title: "Continu ou périodique",
-        body: "Partagez chaque entrée à la seconde, ou retenez-les pour un versement quotidien ou hebdomadaire qui regroupe les frais de réseau.",
+        title: "Continu ou hebdomadaire",
+        body: "Partagez chaque entrée à la seconde, ou regroupez les versements pour économiser les frais.",
       },
       {
         title: "Règles de bonus",
-        body: "Donnez cinq points de plus au réalisateur quand la chanson dépasse le million d'écoutes. Le contrat fait le calcul.",
+        body: "Cinq points de plus au réalisateur après un million d'écoutes. Le contrat fait le calcul.",
       },
       {
         title: "Rien ne change sans accord",
-        body: "Un partage ne change que si tout le monde signe. Ce qui a été gagné reste gagné.",
-      },
-      {
-        title: "Des relevés au cent près",
-        body: "Chaque entrée, chaque part et chaque arrondi dans un seul registre. Exportez-le en CSV pour votre comptable.",
+        body: "Un partage ne change que si tout le monde signe. Les gains passés ne bougent pas.",
       },
     ],
     whoEyebrow: "Pour qui",
@@ -189,10 +185,6 @@ const fr: Dictionary = {
         q: "Continu ou hebdomadaire : que choisir ?",
         a: "Continu si vous voulez que tout le monde voie l'argent arriver en direct. Hebdomadaire si les montants sont minuscules et que vous préférez regrouper les frais de réseau.",
       },
-      {
-        q: "D'où viennent les revenus ?",
-        a: "De tout ce qui peut payer un contrat : streaming, ventes d'éditions, déblocages de contenu, licences. Dans cette démo, un simulateur les envoie.",
-      },
     ],
     closingTitle: "Votre prochain relevé de redevances pourrait être un vumètre en direct.",
     closingBody: "Connectez le portefeuille de démo, faites passer des revenus dans une chanson et regardez-les se partager.",
@@ -200,12 +192,10 @@ const fr: Dictionary = {
   how: {
     eyebrow: "Fonctionnement",
     title: "Au cœur d'un contrat de redevances.",
-    intro:
-      "Un contrat par œuvre. Il garde la feuille de partage, reçoit les revenus de tout ce qui peut le payer et crédite chaque collaborateur selon la règle convenue. Voici exactement ce qu'il fait.",
+    intro: "Un contrat par œuvre : il garde la feuille de partage et paie chacun selon la règle convenue.",
     photoAlt: "Un technicien à la console pendant un spectacle, la foule floue derrière l'écran",
     anatomyTitle: "Anatomie",
-    anatomyBody:
-      "Les sources de revenus paient le contrat. Le contrat applique la feuille de partage (et le bonus actif, s'il y en a un), crédite le solde de chaque collaborateur et verse les poussières d'arrondi à la caisse. Chacun retire à son rythme.",
+    anatomyBody: "Les sources paient le contrat ; le contrat crédite chaque solde ; chacun retire à son rythme.",
     anatomyLabels: {
       sources: "Sources de revenus",
       contract: "Contrat de redevances",
@@ -216,15 +206,13 @@ const fr: Dictionary = {
       dust: "Arrondis → caisse",
     },
     cadenceTitle: "Versement continu ou périodique",
-    cadenceBody:
-      "Un contrat continu partage chaque entrée, et chaque seconde d'un flux en direct, dès sa confirmation. Un contrat périodique retient les entrées et les verse selon un horaire : moins de transactions, mais plus grosses.",
+    cadenceBody: "Partager à chaque seconde, ou retenir les entrées et les verser selon un horaire.",
     continuousLabel: "Continu",
     continuousPoints: ["Les soldes bougent chaque seconde", "Idéal pour le streaming et les ventes fréquentes", "Plus de transactions, plus petites"],
     intervalLabel: "Quotidien ou hebdomadaire",
     intervalPoints: ["Les entrées attendent dans un solde retenu", "N'importe qui peut déclencher un versement plus tôt", "Moins de transactions, moins de frais"],
     precisionTitle: "Précision : calcul en entiers et poussières d'arrondi",
-    precisionBody:
-      "Un contrat ne stocke pas de fractions : chaque montant est un nombre entier de micro-unités (1 tUSDC = 1 000 000). Chaque part est arrondie vers le bas ; ce qui reste, ce sont les poussières.",
+    precisionBody: "Les montants sont des micro-unités entières (1 tUSDC = 1 000 000). Les parts sont arrondies vers le bas ; le reste, ce sont les poussières.",
     precisionExample: "Exemple : 4,100001 tUSDC partagés 35 / 25 / 20 / 10 / 10",
     precisionRows: [
       ["Noor · 35 %", "1,435000"],
@@ -235,13 +223,11 @@ const fr: Dictionary = {
     ],
     precisionTotal: ["Total", "4,100001"],
     bonusTitle: "Règles de bonus",
-    bonusBody:
-      "Un bonus donne des points de plus à un collaborateur quand l'œuvre franchit un seuil, comme la clause d'un réalisateur après un million d'écoutes. Les points viennent de tous les autres, au prorata de leurs parts, et s'appliquent à partir de ce moment.",
+    bonusBody: "Passé un seuil d'écoutes, un collaborateur gagne des points ; les autres cèdent une part au prorata.",
     bonusBefore: "Avant 1 000 000 d'écoutes",
     bonusAfter: "Après",
     amendTitle: "Tout changement exige toutes les signatures",
-    amendBody:
-      "N'importe qui sur la feuille de partage peut proposer de nouvelles parts. Rien ne change tant que tous les collaborateurs actuels n'ont pas signé. Si quelqu'un refuse, le partage actuel reste. Les gains d'avant ne bougent jamais.",
+    amendBody: "Chacun peut proposer de nouvelles parts. Rien ne change sans toutes les signatures ; un refus garde le partage actuel.",
     chainTitle: "Ce qui vit on-chain",
     onChain: ["La feuille de partage et les règles de bonus", "Chaque entrée, versement et retrait", "Les soldes et les poussières d'arrondi", "Les signatures des modifications"],
     offChain: ["Noms et rôles (affichage seulement)", "Pochettes et métadonnées", "Vos comptes sur les plateformes"],
@@ -324,7 +310,7 @@ const fr: Dictionary = {
     gate: {
       eyebrow: "Studio",
       title: "Entrez dans le studio.",
-      body: "Connectez le portefeuille de démo pour voir les œuvres de Noor Haddad, ses soldes en direct et ses relevés. Aucun vrai portefeuille n'est utilisé et rien ne quitte votre navigateur.",
+      body: "Connectez le portefeuille de démo pour voir les œuvres de Noor Haddad et ses soldes en direct.",
       connect: "Connecter le portefeuille de démo",
       rejected: "Vous avez refusé la connexion. Rien n'a été partagé.",
       points: ["Trois œuvres avec des contrats de redevances actifs", "Un simulateur de revenus que vous contrôlez", "Retraits, modifications et registre complet"],
@@ -404,6 +390,7 @@ const fr: Dictionary = {
       totalIn: "Revenus reçus",
       dust: "Arrondis à la caisse",
       channelsTitle: "Canaux",
+      howCalculated: "Comment c'est calculé ?",
       channelsBody: "Le solde de chaque collaborateur, en direct. Les vumètres sautent quand un revenu arrive.",
       share: "Part",
       earned: "Gagné",
@@ -439,7 +426,7 @@ const fr: Dictionary = {
       base: "Convenue",
       propose: "Proposer un changement",
       amendTitle: "Proposer un nouveau partage",
-      amendBody: "Tous les collaborateurs doivent signer avant qu'il s'applique. Les gains d'avant le changement restent tels quels.",
+      amendBody: "S'applique quand tous les collaborateurs ont signé.",
       amendSubmit: "Envoyer pour signatures",
       amendAction: "Proposer une modification du partage",
       amendPending: "Envoi de la proposition…",

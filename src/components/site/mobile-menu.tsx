@@ -41,13 +41,13 @@ export function MobileMenu({
           <span className="sr-only">{openLabel}</span>
         </button>
       </SheetTrigger>
-      <SheetContent side="right" closeLabel={closeLabel} className="flex w-full max-w-none flex-col gap-6 p-5 pt-16 sm:max-w-sm">
+      <SheetContent side="right" closeLabel={closeLabel} className="flex w-[86%] max-w-sm flex-col gap-6 p-5 pt-16">
         <SheetTitle className="sr-only">{title}</SheetTitle>
         <SheetDescription className="sr-only">{title}</SheetDescription>
         <nav aria-label={title}>
           <NavLinks items={items} vertical />
         </nav>
-        <div className="mt-auto flex flex-col gap-4 border-t pt-5">{children}</div>
+        <div className="mt-auto flex flex-col gap-4 border-t pt-5 [&>a]:w-full [&>a]:justify-center">{children}</div>
       </SheetContent>
     </Sheet>
   )

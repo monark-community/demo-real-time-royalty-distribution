@@ -1,4 +1,4 @@
-import { ArrowRightIcon, CheckIcon, MinusIcon } from "lucide-react"
+import { ArrowRightIcon, CheckIcon, MinusIcon, PlusIcon } from "lucide-react"
 import Image from "next/image"
 import Link from "next/link"
 import { notFound } from "next/navigation"
@@ -242,6 +242,20 @@ export default async function HowItWorksPage({ params }: PageProps<"/[locale]/ho
               ))}
             </ul>
           </div>
+        </div>
+      </Section>
+
+      <Section id="faq" title={dict.home.faqTitle}>
+        <div className="max-w-3xl divide-y rounded-xl border bg-card">
+          {dict.home.faq.map((f) => (
+            <details key={f.q} className="group px-5 sm:px-6">
+              <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-4 py-4 font-semibold [&::-webkit-details-marker]:hidden">
+                {f.q}
+                <PlusIcon className="size-4 shrink-0 text-muted-foreground transition-transform group-open:rotate-45" aria-hidden />
+              </summary>
+              <p className="pb-5 text-muted-foreground">{f.a}</p>
+            </details>
+          ))}
         </div>
       </Section>
 

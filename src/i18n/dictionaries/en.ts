@@ -21,6 +21,7 @@ const en = {
   common: {
     skip: "Skip to content",
     demoBadge: "Demo · simulated data",
+    demoChip: "Demo",
     testnet: "Testnet demo · not financial advice · no real funds",
     openStudio: "Open the studio",
     openMenu: "Open menu",
@@ -102,7 +103,7 @@ const en = {
   home: {
     eyebrow: "Royalty contracts for creative teams",
     title: "Get paid every second your work is heard.",
-    sub: "StreamRoyalties turns your split sheet into a live contract. Revenue from streams, sales and licenses reaches every collaborator the moment it lands, with a public record of every cent.",
+    sub: "Your split sheet becomes a live contract: streams, sales and licenses reach every collaborator the moment they land.",
     ctaPrimary: "Open the studio",
     ctaSecondary: "See how a split works",
     meterLabel: "Live royalty meters for Night Bus Home",
@@ -112,8 +113,7 @@ const en = {
     meterNote: "Simulated revenue, replayed in your browser.",
     waitEyebrow: "Why it matters",
     waitTitle: "The six-month wait, removed.",
-    waitBody:
-      "Today, a stream in March shows up on a statement in September, lands in one person's account and gets split by hand. StreamRoyalties splits it the second it arrives.",
+    waitBody: "A stream in March still reaches most teams on a September statement.",
     oldLabel: "The usual way",
     oldSteps: ["Stream", "Distributor", "Statement, 90 to 180 days later", "One person's account", "Spreadsheet", "Transfers, eventually"],
     newLabel: "With StreamRoyalties",
@@ -123,35 +123,31 @@ const en = {
     steps: [
       {
         title: "Write the split sheet.",
-        body: "Who worked on it, what they did, what share they get. The faders make sure it adds up to exactly 100%.",
+        body: "Who worked on it and their share. Faders keep it at exactly 100%.",
       },
       {
         title: "Point your revenue at it.",
-        body: "Streaming payouts, edition sales, unlocks and licenses pay into the work's contract instead of one person's account.",
+        body: "Streams, sales and licenses pay the work's contract, not one person's account.",
       },
       {
         title: "Watch every meter rise.",
-        body: "Each collaborator's balance grows in real time. They withdraw whenever they like, without asking anyone.",
+        body: "Balances grow in real time. Everyone withdraws whenever they like.",
       },
     ],
     featuresEyebrow: "What's on the desk",
     featuresTitle: "Built for how creative money actually moves.",
     features: [
       {
-        title: "Continuous or interval",
-        body: "Split every inflow the second it lands, or hold and release daily or weekly to batch network fees.",
+        title: "Continuous or weekly",
+        body: "Split every inflow the second it lands, or batch releases to save fees.",
       },
       {
         title: "Bonus rules",
-        body: "Give the producer five more points once the song passes a million plays. The contract does the math.",
+        body: "The producer gets five more points after a million plays. The contract does the math.",
       },
       {
         title: "Consent to change",
-        body: "A split only changes when everyone on it signs. What was earned before stays earned.",
-      },
-      {
-        title: "Statements to the cent",
-        body: "Every inflow, share and rounding remainder in one ledger. Export it as CSV for your accountant.",
+        body: "A split changes only when everyone signs. Past earnings never move.",
       },
     ],
     whoEyebrow: "Who it's for",
@@ -186,10 +182,6 @@ const en = {
         q: "Continuous or weekly: which should I pick?",
         a: "Continuous if you want everyone to see money land live. Weekly if inflows are tiny and you'd rather batch network fees.",
       },
-      {
-        q: "Where does the revenue come from?",
-        a: "Anything that can pay a contract: streaming payouts, edition sales, content unlocks, licenses. In this demo, a simulator sends it.",
-      },
     ],
     closingTitle: "Your next royalty statement could be a live meter.",
     closingBody: "Connect the demo wallet, send some revenue through a song and watch it split.",
@@ -197,12 +189,10 @@ const en = {
   how: {
     eyebrow: "How it works",
     title: "Inside a royalty contract.",
-    intro:
-      "One contract per work. It holds the split sheet, receives revenue from anywhere that can pay it, and credits each collaborator by the rule you agreed. Here is exactly what it does.",
+    intro: "One contract per work: it holds the split sheet and pays everyone by the rule you agreed.",
     photoAlt: "An engineer at a mixing desk during a live show, the crowd blurred behind the screen",
     anatomyTitle: "Anatomy",
-    anatomyBody:
-      "Revenue sources pay the contract. The contract applies the split sheet (and any active bonus), credits every collaborator's balance, and sends rounding dust to the treasury recipient. Collaborators withdraw on their own schedule.",
+    anatomyBody: "Sources pay the contract; the contract credits every balance; everyone withdraws on their own schedule.",
     anatomyLabels: {
       sources: "Revenue sources",
       contract: "Royalty contract",
@@ -213,15 +203,13 @@ const en = {
       dust: "Rounding dust → treasury",
     },
     cadenceTitle: "Continuous or interval release",
-    cadenceBody:
-      "Continuous contracts split each inflow, and each second of a live stream, the moment it confirms. Interval contracts hold inflows and release them on a schedule, which means fewer, larger transactions.",
+    cadenceBody: "Split every second, or hold inflows and release them on a schedule.",
     continuousLabel: "Continuous",
     continuousPoints: ["Balances move every second", "Best for streams and frequent sales", "More, smaller transactions"],
     intervalLabel: "Daily or weekly",
     intervalPoints: ["Inflows wait in a held balance", "Anyone can trigger a release early", "Fewer transactions, lower fees"],
     precisionTitle: "Precision: integer math and rounding dust",
-    precisionBody:
-      "Contracts can't store fractions, so every amount is a whole number of micro-units (1 tUSDC = 1,000,000). Each share is rounded down; what's left over is the dust.",
+    precisionBody: "Amounts are whole micro-units (1 tUSDC = 1,000,000). Shares round down; the remainder is dust.",
     precisionExample: "Example: 4.100001 tUSDC split 35 / 25 / 20 / 10 / 10",
     precisionRows: [
       ["Noor · 35%", "1.435000"],
@@ -232,13 +220,11 @@ const en = {
     ],
     precisionTotal: ["Total", "4.100001"],
     bonusTitle: "Bonus rules",
-    bonusBody:
-      "A bonus gives one collaborator extra points once a work passes a threshold, like a producer's escalator after a million plays. The extra comes from everyone else, in proportion to their shares, and applies from that second on.",
+    bonusBody: "Past a play threshold, one collaborator gains points; everyone else gives up a pro-rata slice.",
     bonusBefore: "Before 1,000,000 plays",
     bonusAfter: "After",
     amendTitle: "Changes need every signature",
-    amendBody:
-      "Anyone on the split sheet can propose new shares. Nothing changes until every current collaborator signs. If anyone declines, the current split stays. Earnings from before the change never move.",
+    amendBody: "Anyone can propose new shares. Nothing changes until every collaborator signs; one decline keeps the current split.",
     chainTitle: "What lives on-chain",
     onChain: ["Split sheet and bonus rules", "Every inflow, release and withdrawal", "Balances and rounding dust", "Amendment signatures"],
     offChain: ["Names and roles (display only)", "Artwork and metadata", "Your platform accounts"],
@@ -321,7 +307,7 @@ const en = {
     gate: {
       eyebrow: "Studio",
       title: "Step into the studio.",
-      body: "Connect the demo wallet to see Noor Haddad's works, live balances and statements. No real wallet is used and nothing leaves your browser.",
+      body: "Connect the demo wallet to see Noor Haddad's works and live balances.",
       connect: "Connect demo wallet",
       rejected: "You declined the connection. Nothing was shared.",
       points: ["Three works with live royalty contracts", "A revenue simulator you control", "Withdrawals, amendments and a full ledger"],
@@ -401,6 +387,7 @@ const en = {
       totalIn: "Revenue in",
       dust: "Dust to treasury",
       channelsTitle: "Channels",
+      howCalculated: "How is this calculated?",
       channelsBody: "Each collaborator's balance, live. Meters jump when revenue lands.",
       share: "Share",
       earned: "Earned",
@@ -436,7 +423,7 @@ const en = {
       base: "Agreed",
       propose: "Propose a change",
       amendTitle: "Propose a new split",
-      amendBody: "Every collaborator must sign before it applies. Earnings before the change stay as they are.",
+      amendBody: "Applies once every collaborator signs.",
       amendSubmit: "Send for signatures",
       amendAction: "Propose split amendment",
       amendPending: "Sending the proposal…",

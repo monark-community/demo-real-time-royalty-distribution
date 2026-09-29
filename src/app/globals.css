@@ -88,9 +88,10 @@
   --brass: #7a5c24;
   --panel: #e8e5de;
   --meter-off: #d9d4ca;
-  --chart-1: #7c1d34;
-  --chart-2: #a07a3a;
-  --chart-3: #2e6468;
+  /* Categorical chart order, validated (dataviz validator): lightness, chroma, CVD, contrast. */
+  --chart-1: #a8324f;
+  --chart-2: #b07d1c;
+  --chart-3: #0b7fa0;
   --chart-4: #5f6b2a;
   --chart-5: #4b4038;
   --sidebar: #efede8;
@@ -128,9 +129,9 @@
   --brass: #d2a860;
   --panel: #181512;
   --meter-off: #312b25;
-  --chart-1: #e57a8e;
-  --chart-2: #d2a860;
-  --chart-3: #6fb3b5;
+  --chart-1: #d9607a;
+  --chart-2: #b8862a;
+  --chart-3: #00a3ad;
   --chart-4: #a9b96a;
   --chart-5: #b9a99a;
   --sidebar: #141210;

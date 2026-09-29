@@ -103,7 +103,7 @@ export function MeterBridge({ locale, labels }: { locale: Locale; labels: MeterB
   return (
     <figure
       aria-label={labels.label}
-      className="relative overflow-hidden rounded-2xl border border-[#3a332c] bg-[#1a1714] text-[#eee7d9] shadow-[0_30px_80px_-40px_rgb(26_23_20/0.8),inset_0_1px_0_rgb(255_255_255/0.06)]"
+      className="relative overflow-hidden rounded-2xl border border-[#3a332c] bg-[#1a1714] dark:border-[#4a4138] dark:bg-[#211d19] text-[#eee7d9] shadow-[0_30px_80px_-40px_rgb(26_23_20/0.8),inset_0_1px_0_rgb(255_255_255/0.06)]"
     >
       {/* Header strip */}
       <div className="flex items-center justify-between gap-3 border-b border-[#3a332c] px-4 py-3 sm:px-5">
@@ -120,9 +120,7 @@ export function MeterBridge({ locale, labels }: { locale: Locale; labels: MeterB
         {last ? (
           <span key={last.n} className="flex min-w-0 animate-roll-in items-baseline gap-2 text-sm">
             <span className="nums font-medium text-[#eee7d9]">+{two.format(last.inflow.amount)}</span>
-            <span className="truncate text-[#a99f8f]">
-              {labels.presets[last.inflow.key]} · {labels.payers[last.inflow.key]}
-            </span>
+            <span className="truncate text-[#a99f8f]">{labels.presets[last.inflow.key]}</span>
           </span>
         ) : (
           <span className="nums text-sm text-[#a99f8f]">

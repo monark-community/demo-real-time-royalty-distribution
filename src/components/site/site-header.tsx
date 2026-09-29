@@ -35,6 +35,15 @@ export function SiteHeader({
   badge?: ReactNode
 }) {
   const items = siteNav(locale, dict)
+  const chip = badge ?? (
+    <span
+      title={dict.common.demoBadge}
+      className="silk inline-flex items-center gap-1.5 rounded-full border border-primary/30 bg-primary/8 px-2.5 py-1 text-primary"
+    >
+      <span className="size-1.5 rounded-full bg-primary" aria-hidden />
+      {dict.common.demoChip}
+    </span>
+  )
   const cta = (
     <Link
       href={href(locale, "/app")}
@@ -56,17 +65,18 @@ export function SiteHeader({
         <Link href={href(locale)} className="-ml-1 rounded-md p-1" aria-label={`StreamRoyalties, ${dict.nav.home}`}>
           <Wordmark />
         </Link>
-        {badge}
         <nav aria-label={dict.nav.primary} className="ml-4 hidden md:block">
           <NavLinks items={items} />
         </nav>
         <div className="ml-auto hidden items-center gap-2 md:flex">
+          <span className="hidden lg:inline-flex">{chip}</span>
           {switches}
           <div className="ml-1">{action ?? cta}</div>
         </div>
         <div className="ml-auto flex items-center gap-1 md:hidden">
           {mobileAction}
           <MobileMenu items={items} openLabel={dict.common.openMenu} closeLabel={dict.common.closeMenu} title={dict.common.menu}>
+            <div className="flex">{chip}</div>
             <div className="flex items-center justify-between gap-3">{switches}</div>
             {action ? null : cta}
           </MobileMenu>
