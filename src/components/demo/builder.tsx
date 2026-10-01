@@ -1,12 +1,13 @@
 "use client"
 
-import { PlusIcon, RocketIcon, Trash2Icon, WandSparklesIcon } from "lucide-react"
+import { AlertTriangleIcon, CheckCircle2Icon, PlusIcon, RocketIcon, Trash2Icon, WandSparklesIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useId, useState } from "react"
 
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { NativeSelect } from "@/components/ui/native-select"
 import { Switch } from "@/components/ui/switch"
 import { href } from "@/i18n/config"
 import { t } from "@/i18n/t"
@@ -20,7 +21,7 @@ import type { Bps, Cadence, SourceId, WorkKind } from "@/lib/demo/types"
 import { cn } from "@/lib/utils"
 
 import { useApp } from "./app-context"
-import { FaderBank, MasterMeter } from "./faders"
+import { capsFor, Fader } from "./faders"
 import { PageHeading } from "./parts"
 import { TxLine, useTx } from "./tx"
 
@@ -40,9 +41,6 @@ const CADENCES: Cadence[] = ["continuous", "daily", "weekly"]
 
 let rowSeq = 0
 const rowKey = () => `r${(rowSeq += 1)}`
-
-const selectClass =
-  "h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring aria-[invalid=true]:border-destructive"
 
 function FieldError({ id, msg }: { id: string; msg?: string | null }) {
   if (!msg) return null
@@ -81,6 +79,7 @@ export function Builder() {
   if (!state || !you) return null
 
   const total = sumBps(rows.map((r) => r.bps))
+  const caps = capsFor(Object.fromEntries(rows.map((r) => [r.key, r.bps])))
   const seen = new Map<string, number>()
   rows.forEach((r) => {
     const a = r.address.trim().toLowerCase()
@@ -220,13 +219,13 @@ export function Builder() {
             </div>
             <div>
               <Label htmlFor={`${uid}-kind`}>{b.kindLabel}</Label>
-              <select id={`${uid}-kind`} className={cn(selectClass, "mt-1.5")} value={kind} onChange={(e) => setKind(e.target.value as WorkKind)}>
+              <NativeSelect id={`${uid}-kind`} wrapperClassName="mt-1.5" value={kind} onChange={(e) => setKind(e.target.value as WorkKind)}>
                 {KINDS.map((k) => (
                   <option key={k} value={k}>
                     {d.kinds[k]}
                   </option>
                 ))}
-              </select>
+              </NativeSelect>
             </div>
           </div>
           <div>
@@ -275,116 +274,144 @@ export function Builder() {
               const isYou = r.key === "you"
               const base = `${uid}-${r.key}`
               return (
-                <li key={r.key} className="rounded-lg border bg-background p-4">
-                  <div className="mb-3 flex items-center justify-between gap-2">
-                    <span className="silk text-muted-foreground">
-                      {String(i + 1).padStart(2, "0")}
-                      {isYou ? <span className="ml-2 text-primary">{b.you}</span> : null}
-                    </span>
-                    {!isYou && (
-                      <Button type="button" variant="ghost" size="icon" onClick={() => removeRow(r.key)} aria-label={t(b.remove, { name: r.name || String(i + 1) })}>
-                        <Trash2Icon aria-hidden />
-                      </Button>
-                    )}
-                  </div>
-                  <div className="grid gap-3 md:grid-cols-[1.2fr_1fr_1.5fr]">
-                    <div>
-                      <Label htmlFor={`${base}-name`}>{b.name}</Label>
-                      <Input
-                        id={`${base}-name`}
-                        className="mt-1.5 h-10"
-                        value={r.name}
-                        readOnly={isYou}
-                        placeholder={b.namePlaceholder}
-                        onChange={(ev) => updateRow(r.key, { name: ev.target.value })}
-                        aria-invalid={!!err(e.name)}
-                        aria-describedby={err(e.name) ? `${base}-name-err` : undefined}
-                      />
-                      <FieldError id={`${base}-name-err`} msg={err(e.name)} />
-                    </div>
-                    <div>
-                      <Label htmlFor={`${base}-role`}>{b.role}</Label>
-                      <select
-                        id={`${base}-role`}
-                        className={cn(selectClass, "mt-1.5")}
-                        value={r.role}
-                        onChange={(ev) => updateRow(r.key, { role: ev.target.value })}
-                      >
-                        {ROLE_KEYS.map((k) => (
-                          <option key={k} value={k}>
-                            {d.roles[k]}
-                          </option>
-                        ))}
-                        <option value="other">{d.roles.other}</option>
-                      </select>
-                      {r.role === "other" && (
-                        <>
-                          <Input
-                            aria-label={b.customRole}
-                            placeholder={b.customRole}
-                            className="mt-2 h-10"
-                            value={r.customRole}
-                            onChange={(ev) => updateRow(r.key, { customRole: ev.target.value })}
-                            aria-invalid={!!err(e.role)}
-                          />
-                          <FieldError id={`${base}-role-err`} msg={err(e.role)} />
-                        </>
+                <li key={r.key} className="flex gap-3 rounded-lg border bg-background p-4 sm:gap-5">
+                  <div className="min-w-0 flex-1">
+                    <div className="mb-3 flex min-h-9 items-center justify-between gap-2">
+                      <span className="silk text-muted-foreground">
+                        {String(i + 1).padStart(2, "0")}
+                        {isYou ? <span className="ml-2 text-primary">{b.you}</span> : null}
+                      </span>
+                      {!isYou && (
+                        <Button type="button" variant="ghost" size="icon" onClick={() => removeRow(r.key)} aria-label={t(b.remove, { name: r.name || String(i + 1) })}>
+                          <Trash2Icon aria-hidden />
+                        </Button>
                       )}
                     </div>
-                    <div>
-                      <Label htmlFor={`${base}-addr`}>{b.address}</Label>
-                      <Input
-                        id={`${base}-addr`}
-                        className="nums mt-1.5 h-10 text-xs sm:text-sm"
-                        value={r.address}
-                        readOnly={isYou}
-                        spellCheck={false}
-                        autoComplete="off"
-                        placeholder={b.addressPlaceholder}
-                        onChange={(ev) => updateRow(r.key, { address: ev.target.value })}
-                        aria-invalid={!!err(e.address)}
-                        aria-describedby={err(e.address) ? `${base}-addr-err` : undefined}
-                      />
-                      <FieldError id={`${base}-addr-err`} msg={err(e.address)} />
+                    <div className="grid gap-3 md:grid-cols-[1.2fr_1fr_1.5fr]">
+                      <div>
+                        <Label htmlFor={`${base}-name`}>{b.name}</Label>
+                        <Input
+                          id={`${base}-name`}
+                          className="mt-1.5 h-10"
+                          value={r.name}
+                          readOnly={isYou}
+                          placeholder={b.namePlaceholder}
+                          onChange={(ev) => updateRow(r.key, { name: ev.target.value })}
+                          aria-invalid={!!err(e.name)}
+                          aria-describedby={err(e.name) ? `${base}-name-err` : undefined}
+                        />
+                        <FieldError id={`${base}-name-err`} msg={err(e.name)} />
+                      </div>
+                      <div>
+                        <Label htmlFor={`${base}-role`}>{b.role}</Label>
+                        <NativeSelect
+                          id={`${base}-role`}
+                          wrapperClassName="mt-1.5"
+                          value={r.role}
+                          onChange={(ev) => updateRow(r.key, { role: ev.target.value })}
+                        >
+                          {ROLE_KEYS.map((k) => (
+                            <option key={k} value={k}>
+                              {d.roles[k]}
+                            </option>
+                          ))}
+                          <option value="other">{d.roles.other}</option>
+                        </NativeSelect>
+                        {r.role === "other" && (
+                          <>
+                            <Input
+                              aria-label={b.customRole}
+                              placeholder={b.customRole}
+                              className="mt-2 h-10"
+                              value={r.customRole}
+                              onChange={(ev) => updateRow(r.key, { customRole: ev.target.value })}
+                              aria-invalid={!!err(e.role)}
+                            />
+                            <FieldError id={`${base}-role-err`} msg={err(e.role)} />
+                          </>
+                        )}
+                      </div>
+                      <div>
+                        <Label htmlFor={`${base}-addr`}>{b.address}</Label>
+                        <Input
+                          id={`${base}-addr`}
+                          className="nums mt-1.5 h-10 text-xs sm:text-sm"
+                          value={r.address}
+                          readOnly={isYou}
+                          spellCheck={false}
+                          autoComplete="off"
+                          placeholder={b.addressPlaceholder}
+                          onChange={(ev) => updateRow(r.key, { address: ev.target.value })}
+                          aria-invalid={!!err(e.address)}
+                          aria-describedby={err(e.address) ? `${base}-addr-err` : undefined}
+                        />
+                        <FieldError id={`${base}-addr-err`} msg={err(e.address)} />
+                      </div>
                     </div>
+                    <label className="mt-3 inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
+                      <input type="radio" name={`${uid}-treasury`} checked={r.treasury} onChange={() => setTreasury(r.key)} className="size-4 accent-[var(--primary)]" />
+                      {b.treasury}
+                    </label>
+                    {err(e.share) ? <p className="mt-1 text-xs font-medium text-destructive">{err(e.share)}</p> : null}
                   </div>
-                  <label className="mt-3 inline-flex cursor-pointer items-center gap-2 text-sm text-muted-foreground">
-                    <input type="radio" name={`${uid}-treasury`} checked={r.treasury} onChange={() => setTreasury(r.key)} className="size-4 accent-[var(--primary)]" />
-                    {b.treasury}
-                  </label>
-                  {err(e.share) ? <p className="mt-1 text-xs font-medium text-destructive">{err(e.share)}</p> : null}
+                  <div className="flex w-[4.5rem] shrink-0 flex-col items-center gap-2 border-l pl-3 sm:w-20 sm:pl-5">
+                    <span className="silk text-muted-foreground" aria-hidden>
+                      {b.share}
+                    </span>
+                    <Fader
+                      value={r.bps}
+                      cap={caps[r.key] ?? FULL}
+                      onChange={(bps) => updateRow(r.key, { bps })}
+                      label={t(d.app.faders.shareOf, { name: r.name || String(i + 1).padStart(2, "0") })}
+                      disabled={locked}
+                      className="min-h-28 flex-1"
+                    />
+                  </div>
                 </li>
               )
             })}
           </ol>
           {err(errors.min) ? <p className="text-sm font-medium text-destructive">{err(errors.min)}</p> : null}
-          <Button type="button" variant="outline" onClick={addRow} disabled={rows.length >= 8}>
-            <PlusIcon aria-hidden />
-            {b.add}
-          </Button>
-
-          <div className="space-y-3 border-t pt-5">
-            <FaderBank
-              items={rows.map((r, i) => ({
-                id: r.key,
-                label: r.name.split(" ")[0] || String(i + 1).padStart(2, "0"),
-                sub: r.role === "other" ? r.customRole : d.roles[r.role as keyof typeof d.roles],
-                tag: r.treasury ? d.app.work.treasury : undefined,
-              }))}
-              values={Object.fromEntries(rows.map((r) => [r.key, r.bps]))}
-              onChange={(key, bps) => updateRow(key, { bps })}
-              disabled={locked}
-            />
-            <MasterMeter total={total} onBalance={balance} canBalance={rows.length > 0 && !locked} />
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Button type="button" variant="outline" onClick={addRow} disabled={rows.length >= 8}>
+              <PlusIcon aria-hidden />
+              {b.add}
+            </Button>
+            <p role="status" aria-live="polite" className={cn("inline-flex flex-wrap items-center gap-x-3 gap-y-1 text-sm", total === FULL ? "text-success" : "text-foreground")}>
+              {total === FULL ? (
+                <>
+                  <CheckCircle2Icon className="size-4" aria-hidden />
+                  {d.app.faders.ok}
+                </>
+              ) : (
+                <>
+                  <span className="inline-flex items-center gap-1.5">
+                    <AlertTriangleIcon className="size-4 text-warning" aria-hidden />
+                    {t(d.app.faders.left, { left: percent(FULL - total, locale) })}
+                  </span>
+                  <button
+                    type="button"
+                    onClick={balance}
+                    disabled={locked || rows.length === 0}
+                    className="font-semibold text-primary underline-offset-4 hover:underline disabled:opacity-50"
+                  >
+                    {d.app.faders.balance}
+                  </button>
+                </>
+              )}
+            </p>
           </div>
         </fieldset>
 
         {/* Release cadence */}
         <fieldset className="module min-w-0 space-y-4 p-5 sm:p-6" disabled={locked}>
           <legend className="sr-only">{b.cadenceTitle}</legend>
-          <h2 className="wide text-xl font-extrabold" aria-hidden>
-            {b.cadenceTitle}
-          </h2>
+          <div>
+            <h2 className="wide text-xl font-extrabold" aria-hidden>
+              {b.cadenceTitle}
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">{b.cadenceBody}</p>
+          </div>
           <div className="grid gap-3 sm:grid-cols-3">
             {CADENCES.map((c) => (
               <label
@@ -398,7 +425,13 @@ export function Builder() {
                   <input type="radio" name={`${uid}-cadence`} value={c} checked={cadence === c} onChange={() => setCadence(c)} className="size-4 accent-[var(--primary)]" />
                   {d.cadences[c]}
                 </span>
-                <span className="text-sm text-muted-foreground">{d.cadences[`${c}Hint` as const]}</span>
+                <span className="pb-2 text-sm text-muted-foreground">{d.cadences[`${c}Hint` as const]}</span>
+                <dl className="mt-auto grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 border-t pt-2 text-xs">
+                  <dt className="text-muted-foreground">{b.cadencePaid}</dt>
+                  <dd className="font-medium">{d.cadences[`${c}Paid` as const]}</dd>
+                  <dt className="text-muted-foreground">{b.cadenceFees}</dt>
+                  <dd className="font-medium">{d.cadences[`${c}Fees` as const]}</dd>
+                </dl>
               </label>
             ))}
           </div>
@@ -420,13 +453,13 @@ export function Builder() {
             <div className="grid gap-4 sm:grid-cols-3">
               <div>
                 <Label htmlFor={`${uid}-bwho`}>{b.bonusWho}</Label>
-                <select id={`${uid}-bwho`} className={cn(selectClass, "mt-1.5")} value={bonusWho} onChange={(e) => setBonusWho(Number(e.target.value))}>
+                <NativeSelect id={`${uid}-bwho`} wrapperClassName="mt-1.5" value={bonusWho} onChange={(e) => setBonusWho(Number(e.target.value))}>
                   {rows.map((r, i) => (
                     <option key={r.key} value={i}>
                       {r.name || String(i + 1).padStart(2, "0")}
                     </option>
                   ))}
-                </select>
+                </NativeSelect>
               </div>
               <div>
                 <Label htmlFor={`${uid}-bextra`}>{b.bonusExtra}</Label>

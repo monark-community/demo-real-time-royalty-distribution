@@ -21,7 +21,19 @@ export interface FaderItem {
 }
 
 /** Two-decimal percent text field that commits on blur or Enter. */
-function PercentField({ value, onCommit, label, disabled }: { value: Bps; onCommit: (bps: Bps) => void; label: string; disabled?: boolean }) {
+function PercentField({
+  value,
+  onCommit,
+  label,
+  disabled,
+  max = FULL,
+}: {
+  value: Bps
+  onCommit: (bps: Bps) => void
+  label: string
+  disabled?: boolean
+  max?: Bps
+}) {
   const { locale } = useApp()
   const fmt = (bps: Bps) =>
     new Intl.NumberFormat(intlLocale[locale], { minimumFractionDigits: 0, maximumFractionDigits: 2, useGrouping: false }).format(bps / 100)
@@ -29,7 +41,7 @@ function PercentField({ value, onCommit, label, disabled }: { value: Bps; onComm
   const commit = () => {
     if (draft === null) return
     const n = Number(draft.replace(",", ".").replace(/[^\d.]/g, ""))
-    if (Number.isFinite(n)) onCommit(Math.max(0, Math.min(FULL, Math.round(n * 100))))
+    if (Number.isFinite(n)) onCommit(Math.max(0, Math.min(max, Math.round(n * 100))))
     setDraft(null)
   }
   return (
@@ -55,7 +67,77 @@ function PercentField({ value, onCommit, label, disabled }: { value: Bps; onComm
   )
 }
 
-/** A bank of vertical faders, one per collaborator, like channel faders on a desk. */
+/**
+ * One vertical channel fader with its percent field. `cap` is the most this share can reach given
+ * everyone else's (100% minus the others): the fader stops there, and the track shows that room.
+ */
+export function Fader({
+  value,
+  onChange,
+  label,
+  cap = FULL,
+  disabled,
+  className,
+}: {
+  value: Bps
+  onChange: (bps: Bps) => void
+  label: string
+  cap?: Bps
+  disabled?: boolean
+  /** Sizes the slider; it fills the remaining height when the parent is a flex column. */
+  className?: string
+}) {
+  // A share already above its cap (only possible in legacy state) may still move down.
+  const limit = Math.max(cap, 0)
+  const clamp = (bps: Bps) => Math.min(bps, Math.max(limit, value))
+  return (
+    <>
+      <SliderPrimitive.Root
+        orientation="vertical"
+        min={0}
+        max={FULL}
+        step={50}
+        value={[value]}
+        disabled={disabled}
+        onValueChange={(next) => onChange(clamp(next[0] ?? 0))}
+        className={cn("relative flex w-10 touch-none flex-col items-center select-none data-[disabled]:opacity-60", className)}
+      >
+        <SliderPrimitive.Track className="relative h-full w-1.5 grow overflow-hidden rounded-full bg-meter-off">
+          {/* Room this share can still take */}
+          <span aria-hidden className="absolute inset-x-0 bottom-0 bg-brass/45 transition-[height]" style={{ height: `${(Math.min(limit, FULL) / FULL) * 100}%` }} />
+          <SliderPrimitive.Range className="absolute w-full rounded-full bg-brass" />
+        </SliderPrimitive.Track>
+        {/* Cap marker: the highest this share can go right now */}
+        {limit < FULL ? (
+          <span
+            aria-hidden
+            className="pointer-events-none absolute right-0 h-0.5 w-2.5 translate-y-1/2 rounded-full bg-brass transition-[bottom]"
+            style={{ bottom: `${(limit / FULL) * 100}%` }}
+          />
+        ) : null}
+        {/* Scale ticks */}
+        <span aria-hidden className="pointer-events-none absolute inset-y-0 left-0 flex flex-col justify-between py-0.5">
+          {Array.from({ length: 11 }, (_, i) => (
+            <span key={i} className={cn("h-px bg-muted-foreground/50", i % 5 === 0 ? "w-2" : "w-1")} />
+          ))}
+        </span>
+        <SliderPrimitive.Thumb
+          aria-label={label}
+          className="relative block h-5 w-9 rounded-[3px] border border-foreground/30 bg-card shadow-[0_2px_0_rgb(0_0_0/0.12)] after:absolute after:inset-x-1.5 after:top-1/2 after:h-0.5 after:-translate-y-1/2 after:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+        />
+      </SliderPrimitive.Root>
+      <PercentField value={value} onCommit={(bps) => onChange(clamp(bps))} label={label} disabled={disabled} max={Math.max(limit, value)} />
+    </>
+  )
+}
+
+/** The most each share can reach: 100% minus everyone else's. */
+export function capsFor(values: Record<string, Bps>): Record<string, Bps> {
+  const total = Object.values(values).reduce((a, b) => a + b, 0)
+  return Object.fromEntries(Object.entries(values).map(([id, v]) => [id, FULL - (total - v)]))
+}
+
+/** A bank of vertical faders, one per collaborator, like channel faders on a desk. Shares are capped so the total never passes 100%. */
 export function FaderBank({
   items,
   values,
@@ -70,6 +152,7 @@ export function FaderBank({
   highlight?: string
 }) {
   const { d } = useApp()
+  const caps = capsFor(values)
   return (
     <div className="-mx-1 overflow-x-auto px-1 pb-1">
       <div className="flex min-w-max gap-2">
@@ -84,31 +167,7 @@ export function FaderBank({
                 highlight === item.id && "border-primary/60"
               )}
             >
-              <SliderPrimitive.Root
-                orientation="vertical"
-                min={0}
-                max={FULL}
-                step={50}
-                value={[v]}
-                disabled={disabled}
-                onValueChange={(next) => onChange(item.id, next[0] ?? 0)}
-                className="relative flex h-40 w-10 touch-none flex-col items-center select-none data-[disabled]:opacity-60"
-              >
-                <SliderPrimitive.Track className="relative h-full w-1.5 grow rounded-full bg-meter-off">
-                  <SliderPrimitive.Range className="absolute w-full rounded-full bg-brass" />
-                </SliderPrimitive.Track>
-                {/* Scale ticks */}
-                <span aria-hidden className="pointer-events-none absolute inset-y-0 left-0 flex flex-col justify-between py-0.5">
-                  {Array.from({ length: 11 }, (_, i) => (
-                    <span key={i} className={cn("h-px bg-muted-foreground/50", i % 5 === 0 ? "w-2" : "w-1")} />
-                  ))}
-                </span>
-                <SliderPrimitive.Thumb
-                  aria-label={label}
-                  className="relative block h-5 w-9 rounded-[3px] border border-foreground/30 bg-card shadow-[0_2px_0_rgb(0_0_0/0.12)] after:absolute after:inset-x-1.5 after:top-1/2 after:h-0.5 after:-translate-y-1/2 after:bg-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
-                />
-              </SliderPrimitive.Root>
-              <PercentField value={v} onCommit={(bps) => onChange(item.id, bps)} label={label} disabled={disabled} />
+              <Fader value={v} cap={caps[item.id] ?? FULL} onChange={(bps) => onChange(item.id, bps)} label={label} disabled={disabled} className="h-40" />
               <span className="w-full truncate text-center text-xs font-semibold" title={item.label}>
                 {item.label || "…"}
               </span>
