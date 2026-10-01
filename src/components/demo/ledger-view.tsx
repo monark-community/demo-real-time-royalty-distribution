@@ -7,6 +7,7 @@ import { toast } from "sonner"
 
 import { Button } from "@/components/ui/button"
 import { Label } from "@/components/ui/label"
+import { NativeSelect } from "@/components/ui/native-select"
 import { t } from "@/i18n/t"
 import { useDemo } from "@/lib/demo/hooks"
 import { MICRO } from "@/lib/demo/math"
@@ -18,9 +19,6 @@ import { EmptyState, PageHeading } from "./parts"
 
 const KINDS: LedgerKind[] = ["inflow", "stream", "release", "withdraw", "deploy", "amend", "bonus"]
 const PAGE = 40
-
-const selectClass =
-  "h-10 w-full rounded-md border border-input bg-background px-3 text-sm focus-visible:outline-2 focus-visible:outline-ring"
 
 export function LedgerView() {
   const { d } = useApp()
@@ -80,9 +78,9 @@ export function LedgerView() {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end">
         <div className="sm:w-64">
           <Label htmlFor="ledger-work">{l.work}</Label>
-          <select
+          <NativeSelect
             id="ledger-work"
-            className={`${selectClass} mt-1.5`}
+            wrapperClassName="mt-1.5"
             value={work}
             onChange={(e) => {
               setWork(e.target.value)
@@ -95,13 +93,13 @@ export function LedgerView() {
                 {w.title}
               </option>
             ))}
-          </select>
+          </NativeSelect>
         </div>
         <div className="sm:w-56">
           <Label htmlFor="ledger-kind">{l.type}</Label>
-          <select
+          <NativeSelect
             id="ledger-kind"
-            className={`${selectClass} mt-1.5`}
+            wrapperClassName="mt-1.5"
             value={kind}
             onChange={(e) => {
               setKind(e.target.value)
@@ -114,7 +112,7 @@ export function LedgerView() {
                 {l.kinds[k]}
               </option>
             ))}
-          </select>
+          </NativeSelect>
         </div>
         <p className="text-sm text-muted-foreground sm:ml-auto" role="status" aria-live="polite">
           {t(l.showing, { count: filtered.length })}
