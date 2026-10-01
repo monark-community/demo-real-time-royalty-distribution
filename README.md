@@ -1,73 +1,76 @@
-# Welcome to your Lovable project
+# StreamRoyalties
 
-## Project info
+**Get paid every second your work is heard.** StreamRoyalties turns a split sheet into a live royalty contract: revenue from streams, sales and licenses reaches every collaborator the moment it lands, with a ledger down to the rounding dust.
 
-**URL**: https://lovable.dev/projects/dcc567b6-5cd2-4b48-a6d4-3c94200d5d95
+This repository is a **demo**: an independent product incubated by [Monark](https://www.monark.io). Everything runs in the browser against a simulated testnet (tUSDC, a simulated wallet, simulated revenue). No real funds, no backend, no environment variables.
 
-## How can I edit this code?
+Project page: https://www.monark.io/en/project/real-time-royalty-distribution
 
-There are several ways of editing your application.
+## What you can do in the demo
 
-**Use Lovable**
+1. **Connect** the demo wallet (confirm or reject the prompt) and land in the studio as Noor Haddad, with three works and a live claimable balance.
+2. **Write a split sheet** (`/app/new`): collaborators, roles, wallets, shares on vertical faders that must reach exactly 100%, a continuous or interval release, an optional bonus rule; then deploy the royalty contract.
+3. **Run revenue through a work** (`/app/works/night-bus-home`): send streaming batches, sales and licenses, open or close a live stream, watch every channel meter and counter move; trigger the producer's bonus; release held revenue on the weekly podcast.
+4. **Withdraw** your claimable royalties to the wallet.
+5. **Amend a split**: propose new shares and watch co-signers sign (or decline).
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/dcc567b6-5cd2-4b48-a6d4-3c94200d5d95) and start prompting.
+Every transaction has pending, confirmed and failed states. The **Demo controls** menu in the studio can fail the next transaction, make a collaborator decline the next amendment, and **Reset demo**.
 
-Changes made via Lovable will be committed automatically to this repo.
+## Run it locally
 
-**Use your preferred IDE**
+Requirements: Node 22 and pnpm 10.
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
-npm run dev
+```bash
+pnpm install
+pnpm dev          # http://localhost:3151
 ```
 
-**Edit a file directly in GitHub**
+Production build and checks:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+```bash
+pnpm lint
+pnpm typecheck
+pnpm build
+pnpm start        # http://localhost:3151
+```
 
-**Use GitHub Codespaces**
+Screenshots (Playwright, against a running production server): `pnpm screenshots` writes to `docs/screenshots/`.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+## How the simulation works
 
-## What technologies are used for this project?
+- `src/lib/demo/` is the only place that knows about "the chain". UI components call its actions (`sendInflow`, `toggleStream`, `deployWork`, `releaseHeld`, `withdraw`, `proposeAmendment`) and read state through `useDemo()`, so the layer could be swapped for wagmi/viem without touching the UI.
+- Money is integer micro-units (1 tUSDC = 1,000,000), shares are basis points. `math.ts` splits each amount by flooring every share and crediting the remainder (dust) to the work's treasury recipient, exactly like a contract would. Bonus rules re-apportion shares with a largest-remainder method.
+- Live streams accrue per millisecond from a rate and a checkpoint; balances are settled into the ledger whenever something changes.
+- Signed actions go through a simulated wallet prompt, then 1.2 to 2.4 s of pending, then confirm with a block number and hash, or revert. Inflows from outside payers need no signature.
+- State persists in `localStorage` (every access wrapped in try/catch); pages prerender and show a loading state until the browser state is read.
 
-This project is built with:
+## Project structure
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+```
+src/
+  app/
+    [locale]/            en and fr routes (proxy.ts redirects / to the preferred language)
+      (site)/            home, how-it-works, credits, pricing (unlinked, noindex), 404 catch-all
+      app/               the studio: overview, new split sheet, works/[id], ledger
+      opengraph-image.tsx
+    sitemap.ts, robots.ts, icon.svg, globals.css (design tokens)
+  components/
+    home/                meter bridge (hero)
+    demo/                studio UI: wallet prompt, tx states, faders, channel strips, ledger
+    site/                header, footer, brand, locale and theme switches
+    ui/                  components from the Monark UI registry, re-themed
+  i18n/                  typed EN/FR dictionaries
+  lib/demo/              simulated chain, seed data, contract math, store
+docs/
+  site-plan.md           product brief, identity, flows, copy (matches what shipped)
+  assets.md              photo sources and credits
+  screenshots/           Playwright screenshots of every page and flow
+```
 
-## How can I deploy this project?
+## Deploy to Vercel
 
-Simply open [Lovable](https://lovable.dev/projects/dcc567b6-5cd2-4b48-a6d4-3c94200d5d95) and click on Share -> Publish.
+Import the repository in Vercel and deploy with the framework defaults (Next.js, pnpm). No `vercel.json` and no environment variables are needed. Optionally set `NEXT_PUBLIC_SITE_URL` to the production URL for canonical links, sitemap and Open Graph (defaults to `https://streamroyalties.monark.io`).
 
-## Can I connect a custom domain to my Lovable project?
+## Credits
 
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/tips-tricks/custom-domain#step-by-step-guide)
+Photos from Unsplash (see `docs/assets.md` and `/credits`). Built with Monark.
