@@ -18,7 +18,7 @@ Every transaction has pending, confirmed and failed states. The **Demo controls*
 
 ## Run it locally
 
-Requirements: Node 22 and pnpm 10.
+Requirements: Node 22.23.4 or newer on the 22 line and pnpm 10.
 
 ```bash
 pnpm install
@@ -69,7 +69,7 @@ docs/
 
 ## Deploy to Vercel
 
-Import the repository in Vercel and deploy with the framework defaults (Next.js, pnpm). No `vercel.json` and no environment variables are needed. Optionally set `NEXT_PUBLIC_SITE_URL` to the production URL for canonical links, sitemap and Open Graph (defaults to `https://streamroyalties.monark.io`).
+Import the repository in Vercel and deploy with the framework defaults (Next.js, pnpm). No `vercel.json` and no environment variables are needed. Vercel runs Node 22 (`engines` in `package.json`), and `pnpm build` and `pnpm start` stop on a Node release exposed to CVE-2026-111497. Optionally set `NEXT_PUBLIC_SITE_URL` to the production URL for canonical links, sitemap and Open Graph (defaults to `https://streamroyalties.monark.io`).
 
 ## Credits
 
